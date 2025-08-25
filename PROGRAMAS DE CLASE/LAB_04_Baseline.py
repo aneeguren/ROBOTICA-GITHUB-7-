@@ -1,19 +1,17 @@
-# LAB_01
-
-# Import libraries and packages #INSERTAR LIBRERIAS
-import matplotlib.pyplot as plt #INSERTAR LIBRERIAS
-from mpl_toolkits import mplot3d #INSERTAR LIBRERIAS
-import numpy as np #INSERTAR LIBRERIAS
+# Import libraries and packages
+import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
+import numpy as np
 
 # create the fig and ax objects to handle figure and axes of the fixed frame
-fig,ax = plt.subplots() #FIG=VENTANA, AX=EJES
+fig,ax = plt.subplots()
 
 # Use 3d view 
 ax = plt.axes(projection = "3d")
 
 
 
-def setaxis(x1, x2, y1, y2, z1, z2): #MANEJAR LA VISTA, HACER ZOOMOUT, X1=DESDE DONDE EMPIEZAS A VER A DONDE ACABAS D VER, SUELE SER 0
+def setaxis(x1, x2, y1, y2, z1, z2):
     # this function is used to fix the view to the values of input arguments
     # -----------------------------------------------------------------------
     # ARGUMENTS
@@ -21,13 +19,13 @@ def setaxis(x1, x2, y1, y2, z1, z2): #MANEJAR LA VISTA, HACER ZOOMOUT, X1=DESDE 
     # y1, y2 -> numeric value
     # y1, z2 -> numeric value
     # -----------------------------------------------------------------------
-    ax.set_xlim3d(x1,x2) #Q EL EJE X VA DE X1 A X2
+    ax.set_xlim3d(x1,x2)
     ax.set_ylim3d(y1,y2)
     ax.set_zlim3d(z1,z2)
-    ax.view_init(elev=30, azim=40) #APARTE DE AMPLIAR LA IMAGEN, Q ADEMAS DE COMO PRESPECTIVA
+    ax.view_init(elev=30, azim=40)
 
 
-def fix_system(axis_length): #RECIBE DE PARAMETROS UN NUMERO Q ES LA LONJITUD D LOS EJES
+def fix_system(axis_length):
     # Fix system function 
     # Plots a 3D centered at [x,y,z] = [0,0,0]
     # -------------------------------------------------------------------
@@ -35,14 +33,14 @@ def fix_system(axis_length): #RECIBE DE PARAMETROS UN NUMERO Q ES LA LONJITUD D 
     # axis_length -> used to specify the length of the axis, in this case
     #                all axes are of the same length
     # -------------------------------------------------------------------
-    x = [0, axis_length] #LONGITUD DE LA LINEA Q SE QUIERE PINTAR, Q IRA DESDE 0 AL NUMERO Q LE DIGAS
+    x = [0, axis_length]
     y = [0, axis_length] 
     z = [0, axis_length]
     zp = [0, 0]
-    ax.plot3D(x, zp, zp, color='red') #PARA PINTAR LA LINEA, COMO SOLO QUIERES DIBUJAR EN X, A LA Z LE MANDAS 0, Q ES EL COMANDO ANTERIOR A ESTE
+    ax.plot3D(x, zp, zp, color='red')
     ax.plot3D(zp, y, zp, color='blue')
     ax.plot3D(zp, zp, z, color='green')
-    plt.draw() #PARA MOSTRAR LA IMAGEN
+    
 
 def sind(t):
     # sind function
@@ -51,7 +49,7 @@ def sind(t):
     # Arguments
     # t -> Numeric, angle in degrees. 
     # ----------------------------------------------------------------------
-    res = np.sin(t*np.pi/180) #DE GRADOS A RADIANES, T ES LA ROTACION Q SE QUIERE EN GRADOS.
+    res = np.sin(t*np.pi/180)
     return res
 
 def cosd(t):
@@ -65,11 +63,36 @@ def cosd(t):
     return res
 
 
+def RotZ(t):
+    Rz = np.array(([cosd(t),-sind(t),0],[sind(t),cosd(t),0],[0,0,1]))
+    return Rz
+
+def drawVector(v):
+    deltaX = [0, v[0]]
+    deltaY = [0, v[1]]
+    deltaZ = [0, v[2]]
+    ax.plot3D(deltaX, deltaY, deltaZ,color='orange')
+
+
 # Set the view 
-setaxis(0,2,0,2,0,2) #CONFIGURACION DE LA VISTA D LA CAMARA
+setaxis(0,2,0,2,0,2)
 
 # plot the axis
-fix_system(1) #DIBUJAR LAS LINEAS, CON LONGITUD DE UNA UNIDAD, POR ESO EL 1
+fix_system(1)
+
+# draw vector1
+v1 = np.array([2,0,0])
+drawVector(v1)
+
+# draw vector2
+v2 = RotZ(45).dot(v1)
+drawVector(v2)
+
+
+
 
 # show image.
-plt.show() #PARA ASEGURAR EL DIBUJO
+plt.draw()
+plt.show()
+
+
