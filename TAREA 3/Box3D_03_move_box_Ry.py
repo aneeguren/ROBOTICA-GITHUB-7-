@@ -193,8 +193,13 @@ drawBox(box_moved[0],box_moved[1],box_moved[2],box_moved[3],box_moved[4],box_mov
 
 
 
-def animate_box_y(t):
-    n = 0  # condición inicial
+
+p_init = (p1_init, p2_init, p3_init, p4_init, p5_init, p6_init, p7_init, p8_init)
+
+
+def animate_box_translation_y(t):
+  
+    n = 0
     while n < t: 
         ax.cla()  # limpiar pantalla
 
@@ -204,35 +209,21 @@ def animate_box_y(t):
         # Dibujar ejes
         fix_system(10, 1)
 
-        # Rotar los puntos de la caja en el eje X n grados
-        Rx = RotY(n)
+        # --- Traslación en eje Z ---
+        translation = np.array([0, n * 0.1, 0])
 
-        p1_rot = Rx.dot(p1_init)
-        p2_rot = Rx.dot(p2_init)
-        p3_rot = Rx.dot(p3_init)
-        p4_rot = Rx.dot(p4_init)
-        p5_rot = Rx.dot(p5_init)
-        p6_rot = Rx.dot(p6_init)
-        p7_rot = Rx.dot(p7_init)
-        p8_rot = Rx.dot(p8_init)
+        # Aplicar traslación a cada punto de la caja
+        points_trans = [p + translation for p in p_init]
 
-        # Dibujar la caja rotada
-        drawBox(p1_rot, p2_rot, p3_rot, p4_rot,
-                p5_rot, p6_rot, p7_rot, p8_rot)
+        # Dibujar caja trasladada
+        drawBox(*points_trans)
 
         n = n + 1
         plt.draw()
-        plt.pause(0.05)
+        plt.pause(0.05)   # control de velocidad
 
-
-
-
-animate_box_y(90) 
-
-
-# show image.
-plt.draw()
-plt.show()
+# Mueve la caja en el eje y (por ejemplo, 100 pasos)
+animate_box_translation_y(50)
 
 
 
