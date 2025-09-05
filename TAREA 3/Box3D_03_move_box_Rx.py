@@ -75,7 +75,7 @@ def drawVector(p_fin, p_init=[0,0,0], color='black',linewidth=1):
 
 
 
-def drawBox(p1, p2, p3, p4, p5, p6, p7, p8):
+def drawBox(p1, p2, p3, p4, p5, p6, p7, p8, color = 'black'):
 
     drawScatter(p1)
     drawScatter(p2)
@@ -86,91 +86,51 @@ def drawBox(p1, p2, p3, p4, p5, p6, p7, p8):
     drawScatter(p7)
     drawScatter(p8)
 
-    drawVector(p1,p2)
-    drawVector(p2,p3)
-    drawVector(p3,p4)
-    drawVector(p4,p1)
-    drawVector(p5,p6)
-    drawVector(p6,p7)
-    drawVector(p7,p8)
-    drawVector(p8,p5)
-    drawVector(p4,p8)
-    drawVector(p1,p5)
-    drawVector(p3,p7)
-    drawVector(p2,p6)
+    drawVector(p1,p2,color = color)
+    drawVector(p2,p3,color = color)
+    drawVector(p3,p4,color = color)
+    drawVector(p4,p1,color = color)
+    drawVector(p5,p6,color = color)
+    drawVector(p6,p7,color = color)
+    drawVector(p7,p8,color = color)
+    drawVector(p8,p5,color = color)
+    drawVector(p4,p8,color = color)
+    drawVector(p1,p5,color = color)
+    drawVector(p3,p7,color = color)
+    drawVector(p2,p6,color = color)
 
 
 def drawScatter(point,color='black',marker='o'):
     ax.scatter(point[0],point[1],point[2],marker='o')
 
+def rotate_box(p1,p2,p3,p4,p5,p6,p7,p8,axis='x', angle = 0):
+    rotation_matrix = np.eye(3)
+    if axis=='x':
+        rotation_matrix = RotX(angle)
+    if axis=='y':
+        pass 
+    if axis=='z':
+        pass
 
-def move_Box(p1,p2,p3,p4,p5,p6,p7,p8, delta_x = 0, delta_y = 0, delta_z = 0):
-    # move_Box
-    # Moove a box
-    # ----------------------------------------------------------------------
-    # Arguments
-    # p1 -> point positin in 3D [p1_x, p1_y, p1_z]
-    # p2 -> point positin in 3D [p2_x, p2_y, p2z]
-    # p3 -> point positin in 3D [p3_x, p3_y, p3_z]
-    # p4 -> point positin in 3D [p4_x, p4_y, p4_z]
-    # p5 -> point positin in 3D [p5_x, p5_y, p5_z]
-    # p6 -> point positin in 3D [p6_x, p6_y, p6_z]
-    # p7 -> point positin in 3D [p7_x, p7_y, p7_z]
-    # p8 -> point positin in 3D [p8_x, p8_y, p8_z]
-    # axis -> Axis of rotation, if no axis is defined, the default value is used (axis = z)
-    # distance -> distance to be moved
-    # ----------------------------------------------------------------------
-    # Output 
-    # A list of the 8 rotated points. 
-    # [p1_rot, p2_rot, p3_rot, p4_rot, p5_rot, p6_rot, p7_rot, p8_rot] 
-    #-----------------------------------------------------------------------
+    p1_rot = rotation_matrix.dot(p1)
+    p2_rot = rotation_matrix.dot(p2)
+    p3_rot = rotation_matrix.dot(p3)
+    p4_rot = rotation_matrix.dot(p4)
+    p5_rot = rotation_matrix.dot(p5)
+    p6_rot = rotation_matrix.dot(p6)
+    p7_rot = rotation_matrix.dot(p7)
+    p8_rot = rotation_matrix.dot(p8)
 
-    # 1 0 0 delta_x
-    # 0 1 0 delta_y
-    # 0 0 1 delta_z
-    # 0 0 0 1 
-
-    p1 = [p1[0], p1[1], p1[2], 1]
-    p2 = [p2[0], p2[1], p2[2], 1]
-    p3 = [p3[0], p3[1], p3[2], 1]
-    p4 = [p4[0], p4[1], p4[2], 1]
-    p5 = [p5[0], p5[1], p5[2], 1]
-    p6 = [p6[0], p6[1], p6[2], 1]
-    p7 = [p7[0], p7[1], p7[2], 1]
-    p8 = [p8[0], p8[1], p8[2], 1]
+    return [p1_rot,p2_rot, p3_rot, p4_rot, p5_rot, p6_rot, p7_rot, p8_rot]
 
 
 
-
-    Translation_Matrix = np.array(([1,0,0, delta_x],[0, 1, 0, delta_y],[0, 0, 1, delta_z],[0, 0, 0, 1]))
-
-
-    p1_t = Translation_Matrix.dot(p1)
-    p2_t = Translation_Matrix.dot(p2)
-    p3_t = Translation_Matrix.dot(p3)
-    p4_t = Translation_Matrix.dot(p4)
-    p5_t = Translation_Matrix.dot(p5)
-    p6_t = Translation_Matrix.dot(p6)
-    p7_t = Translation_Matrix.dot(p7)
-    p8_t = Translation_Matrix.dot(p8)
-
-    p1_t = p1_t[:3]
-    p2_t = p2_t[:3]
-    p3_t = p3_t[:3]
-    p4_t = p4_t[:3]
-    p5_t = p5_t[:3]
-    p6_t = p6_t[:3]
-    p7_t = p7_t[:3]
-    p8_t = p8_t[:3]
-
-    return [p1_t,p2_t, p3_t, p4_t, p5_t, p6_t, p7_t, p8_t]
-
-
+    
 # Set the view 
 setaxis(-15,15,-15,15,-15,15)
 
 # plot the axis
-fix_system(10,linewidth=1)
+fix_system(10,1)
 
 p1_init = [0,0,0]
 p2_init = [7,0,0]
@@ -185,19 +145,16 @@ p8_init = [0,2,3]
 drawBox(p1_init, p2_init, p3_init, p4_init,
         p5_init, p6_init, p7_init, p8_init)
 
-
-box_moved = move_Box(p1_init, p2_init, p3_init, p4_init, p5_init, p6_init, p7_init, p8_init, 5, 5, 2)
-
-
-drawBox(box_moved[0],box_moved[1],box_moved[2],box_moved[3],box_moved[4],box_moved[5],box_moved[6],box_moved[7])
+[p1_rot, p2_rot, p3_rot, p4_rot, p5_rot, p6_rot, p7_rot, p8_rot] = rotate_box(p1_init, p2_init, p3_init, p4_init,
+        p5_init, p6_init, p7_init, p8_init,axis='z', angle = 15) 
 
 
 
-p_init = (p1_init, p2_init, p3_init, p4_init, p5_init, p6_init, p7_init, p8_init)
+drawBox(p1_rot, p2_rot, p3_rot, p4_rot, p5_rot, p6_rot, p7_rot, p8_rot,color='red')
 
 
-def animate_box_translation_rotation_x(t):
-    n = 0
+def animate_box_x(t):
+    n = 0  # condición inicial
     while n < t: 
         ax.cla()  # limpiar pantalla
 
@@ -210,31 +167,30 @@ def animate_box_translation_rotation_x(t):
         # --- Traslación en eje X ---
         translation = np.array([n * 0.1, 0, 0])  # avanza en X
 
-        # --- Rotación alrededor de X ---
-        angle = n * 5  # velocidad de rotación en grados
-        Rx = RotX(angle)
+        # Trasladar los puntos de la caja
+        p1_trans = np.array(p1_init) + translation
+        p2_trans = np.array(p2_init) + translation
+        p3_trans = np.array(p3_init) + translation
+        p4_trans = np.array(p4_init) + translation
+        p5_trans = np.array(p5_init) + translation
+        p6_trans = np.array(p6_init) + translation
+        p7_trans = np.array(p7_init) + translation
+        p8_trans = np.array(p8_init) + translation
 
-        # Aplicar rotación y traslación a cada punto de la caja
-        points_trans = []
-        for p in p_init:
-            p_rot = Rx.dot(p)             # rotación en torno al eje X
-            p_final = p_rot + translation  # luego traslación en X
-            points_trans.append(p_final)
-
-        # Dibujar caja transformada
-        drawBox(*points_trans)
+        # Dibujar la caja trasladada
+        drawBox(p1_trans, p2_trans, p3_trans, p4_trans,
+                p5_trans, p6_trans, p7_trans, p8_trans, color="red")
 
         n = n + 1
         plt.draw()
-        plt.pause(0.05)   # control de velocidad
+        plt.pause(0.05)  
 
-# Ejecutar animación: rotar y avanzar en X
-animate_box_translation_rotation_x(50)
+# Ejecutar animación: trasladar en X
+animate_box_x(90) 
+
+# Mostrar figura
+plt.draw()
+plt.show()
 
 
 
-
-    # COS(M) -SEN(M) 0 0
-    # SEN(M)  COS(M) 0 0
-    # 0         0    1 0 
-    # 0         0    0 1 
