@@ -194,8 +194,7 @@ drawBox(box_moved[0],box_moved[1],box_moved[2],box_moved[3],box_moved[4],box_mov
 p_init = (p1_init, p2_init, p3_init, p4_init, p5_init, p6_init, p7_init, p8_init)
 
 
-def animate_box_translation_z(t):
-
+def animate_box_translation_rotation_z(t):
     n = 0
     while n < t: 
         ax.cla()  # limpiar pantalla
@@ -207,20 +206,28 @@ def animate_box_translation_z(t):
         fix_system(10, 1)
 
         # --- Traslación en eje Z ---
-        translation = np.array([0, 0, n * 0.1])  # en x no se mueve, en y no se mueve, en z se mueve n*0,1
+        translation = np.array([0, 0, n * 0.1])  # sube en Z
 
-        # Aplicar traslación a cada punto de la caja
-        points_trans = [p + translation for p in p_init]
+        # --- Rotación alrededor de Z ---
+        angle = n * 5  # velocidad de rotación en grados
+        Rz = RotZ(angle)
 
-        # Dibujar caja trasladada
+        # Aplicar rotación y traslación a cada punto de la caja
+        points_trans = []
+        for p in p_init:
+            p_rot = Rz.dot(p)            # rotación en torno al eje Z
+            p_final = p_rot + translation  # luego traslación en Z
+            points_trans.append(p_final)
+
+        # Dibujar caja transformada
         drawBox(*points_trans)
 
         n = n + 1
         plt.draw()
         plt.pause(0.05)   # control de velocidad
 
-# Mueve la caja en el eje Z (por ejemplo, 100 pasos)
-animate_box_translation_z(50)
+# Ejecutar animación: rotar y subir en Z
+animate_box_translation_rotation_z(50)
 
 
 
